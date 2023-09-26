@@ -157,7 +157,7 @@ def deanonymizer(text, entities, operators):
     return text
     
         
-def job_reidentification_pipeline(schema_name,topic_input,key_name ):
+def run_reid_pipeline(schema_name,topic_input,key_name ):
 
     print("Retrieving Key ....")
     encryption_key = retrieve_key(key_name)
