@@ -1,0 +1,7 @@
+confluent_kafka==2.2.0
+cryptography==41.0.4
+kafka_python==2.0.2
+presidio_analyzer==2.2.33
+presidio_anonymizer==2.2.33
+pyspark==3.4.1
+Requests==2.31.0
