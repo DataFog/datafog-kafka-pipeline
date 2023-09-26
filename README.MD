@@ -1,6 +1,9 @@
 # datafog-api
 The api part is purely aspirational at this point - right now it's just standing up the spark and kafka containers. 
 
+# Status
+
+
 # Pipeline Checklist
 - [] Run docker-compose up --build
 - [] Create input and output topics
@@ -8,6 +11,8 @@ The api part is purely aspirational at this point - right now it's just standing
 - [] Run DeID Pipeline
 - [] (Optional) Run ReID Pipeline 
 - [] Check output topic to make sure it looks right
+
+Right now the specific pipeline steps are done by executing commands within specific containers (see below). 
 
 # Sending Test Messages
 I have been using the https://github.com/Aiven-Labs/python-fake-data-producer-for-apache-kafka to send test messages to the kafka server. You can use the following command to send messages to the server:
