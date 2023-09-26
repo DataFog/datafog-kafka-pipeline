@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# broken - just execute the commands manually
 # Clone the repository
 git clone https://github.com/Aiven-Labs/python-fake-data-producer-for-apache-kafka.git
 
@@ -8,6 +9,12 @@ cd python-fake-data-producer-for-apache-kafka
 
 # Install requirements
 pip install -r requirements.txt
+
+git clone https://github.com/dpkp/kafka-python.git
+cd kafka-python
+pip install .
+cd ..
+
 
 # Run the main.py script
 python main.py \

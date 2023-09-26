@@ -1,7 +1,6 @@
 # datafog-api
 The api part is purely aspirational at this point - right now it's just standing up the spark and kafka containers. 
 
-# Status
 
 
 # Pipeline Checklist
