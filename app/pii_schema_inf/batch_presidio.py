@@ -8,10 +8,10 @@ from presidio_anonymizer.entities.engine.result import EngineResult
 
 
 import sys
-sys.path.append('/opt/app/custom_recognizers/user_recognizer')
+sys.path.append('/opt/app/custom_entities/user_recognizer')
 import user_recognizer
 
-sys.path.append('/opt/app/custom_recognizers/custom_card_recognizer')
+sys.path.append('/opt/app/custom_entities/custom_card_recognizer')
 import custom_card_recognizer
 @dataclass
 class DictAnalyzerResult:
@@ -35,15 +35,15 @@ class BatchAnalyzerEngine(AnalyzerEngine):
 
         # Set up analyzer with our updated recognizer registry
         AnalyzerEngine.__init__(self, registry=registry)
-    
+
     def analyze_list(self, list_of_texts: Iterable[str], **kwargs) -> List[List[RecognizerResult]]:
         """
         Analyze an iterable of strings
-        
+
         :param list_of_texts: An iterable containing strings to be analyzed.
         :param kwargs: Additional parameters for the `AnalyzerEngine.analyze` method.
         """
-        
+
         list_results = []
         for text in list_of_texts:
             results = self.analyze(text=text, **kwargs) if isinstance(text, str) else []
@@ -53,13 +53,13 @@ class BatchAnalyzerEngine(AnalyzerEngine):
     def analyze_dict(
      self, input_dict: Dict[str, Union[object, Iterable[object]]], **kwargs) -> Iterator[DictAnalyzerResult]:
         """
-        Analyze a dictionary of keys (strings) and values (either object or Iterable[object]). 
+        Analyze a dictionary of keys (strings) and values (either object or Iterable[object]).
         Non-string values are returned as is.
-        
+
         :param input_dict: The input dictionary for analysis
         :param kwargs: Additional keyword arguments for the `AnalyzerEngine.analyze` method
         """
-        
+
         for key, value in input_dict.items():
             if not value:
                 results = []
@@ -68,7 +68,7 @@ class BatchAnalyzerEngine(AnalyzerEngine):
                     results: List[RecognizerResult] = self.analyze(text=value, **kwargs)
                 elif isinstance(value, collections.Iterable):
                     results: List[List[RecognizerResult]] = self.analyze_list(
-                                list_of_texts=value, 
+                                list_of_texts=value,
                                 **kwargs)
                 else:
                     results = []
@@ -76,21 +76,21 @@ class BatchAnalyzerEngine(AnalyzerEngine):
 
 class BatchAnonymizerEngine(AnonymizerEngine):
     """
-    Class inheriting from the AnonymizerEngine and adding additional functionality 
+    Class inheriting from the AnonymizerEngine and adding additional functionality
     for anonymizing lists or dictionaries.
     """
-    
+
     def anonymize_list(
-        self, 
-        texts:List[str], 
-        recognizer_results_list: List[List[RecognizerResult]], 
+        self,
+        texts:List[str],
+        recognizer_results_list: List[List[RecognizerResult]],
         **kwargs
     ) -> List[EngineResult]:
         """
         Anonymize a list of strings.
-        
+
         :param texts: List containing the texts to be anonymized (original texts)
-        :param recognizer_results_list: A list of lists of RecognizerResult, 
+        :param recognizer_results_list: A list of lists of RecognizerResult,
         the output of the AnalyzerEngine on each text in the list.
         :param kwargs: Additional kwargs for the `AnonymizerEngine.anonymize` method
         """
@@ -109,12 +109,12 @@ class BatchAnonymizerEngine(AnonymizerEngine):
 
         """
         Anonymize values in a dictionary.
-        
-        :param analyzer_results: Iterator of `DictAnalyzerResult` 
+
+        :param analyzer_results: Iterator of `DictAnalyzerResult`
         containing the output of the AnalyzerEngine.analyze_dict on the input text.
         :param kwargs: Additional kwargs for the `AnonymizerEngine.anonymize` method
         """
-        
+
         return_dict = {}
         for result in analyzer_results:
             if isinstance(result.value, str):
@@ -122,9 +122,9 @@ class BatchAnonymizerEngine(AnonymizerEngine):
                 return_dict[result.key] = resp.text
             elif isinstance(result.value, collections.Iterable):
                 anonymize_respones = self.anonymize_list(texts=result.value,
-                                                         recognizer_results_list=result.recognizer_results, 
+                                                         recognizer_results_list=result.recognizer_results,
                                                          **kwargs)
-                return_dict[result.key] = anonymize_respones 
+                return_dict[result.key] = anonymize_respones
             else:
                 return_dict[result.key] = result.value
 
