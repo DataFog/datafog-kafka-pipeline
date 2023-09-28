@@ -6,7 +6,7 @@ import json
 
 import batch_presidio as presidio
 
-import atlas_integration as atlas
+import atlas as atlas
 
 from datetime import datetime
 
